@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Plant Leaf Disease Image Classification</title>
+    <style>
+        /* -------- Global Styling -------- */
+        * {
+            box-sizing: border-box;
+            transition: all 0.3s ease;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #a8edea, #fed6e3);
+            color: #222;
+            text-align: center;
+            padding: 40px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            color: #2b6777;
+            background: #ffffffa8;
+            padding: 20px 30px;
+            border-radius: 20px;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+
+        form {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            padding: 30px;
+            max-width: 600px;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        label[for="fileInput"] {
+            display: inline-block;
+            background-color: #2b6777;
+            color: white;
+            padding: 14px 30px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            font-size: 16px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            user-select: none;
+        }
+
+        label[for="fileInput"]:hover {
+            background-color: #52ab98;
+            transform: scale(1.05);
+        }
+
+        button {
+            background-color: #2b6777;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #52ab98;
+            transform: scale(1.05);
+        }
+
+        /* -------- Image Styling -------- */
+        #preview, .uploaded-image {
+            display: block;
+            max-width: 300px;   /* limit width */
+            width: 100%;        /* responsive */
+            margin: 20px auto 0 auto;
+            border-radius: 20px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+
+        #preview:hover, .uploaded-image:hover {
+            transform: scale(1.02);
+        }
+
+        h2 {
+            color: #204051;
+            margin-top: 25px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Plant Leaf Disease Image Classification</h1>
+    <form method="POST" action="/" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept="image/*" required style="display: none;" />
+        <label for="fileInput">Click here to select Image</label>
+        <br />
+        <img id="preview" src="#" alt="" style="display:none;" />
+        <br />
+        <button type="submit">Upload & Predict</button>
+    </form>
+
+    {% if prediction %}
+        <h2>Prediction: {{ prediction }}</h2>
+        <img src="{{ image_url }}" alt="Uploaded Image" class="uploaded-image" />
+    {% endif %}
+
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const preview = document.getElementById('preview');
+
+        fileInput.addEventListener('change', function() {
+            const file = this.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                }
+                reader.readAsDataURL(file);
+            } else {
+                preview.src = '#';
+                preview.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>
